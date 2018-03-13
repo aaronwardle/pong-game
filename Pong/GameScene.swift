@@ -17,14 +17,47 @@ class GameScene: SKScene {
     private var lastUpdateTime : TimeInterval = 0
         
     private var leftPaddle : SKSpriteNode?
+    private var ballObject : SKShapeNode?
     
+    override func didMove(to view: SKView) {
+        
+        // Setting up some physics as a test
+        let worldBorder = SKPhysicsBody(edgeLoopFrom: self.frame)
+        self.physicsBody = worldBorder
+        self.physicsBody?.friction = 1
+        
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: -1)
+        view.showsPhysics = true
+    }
     
     override func sceneDidLoad() {
 
+        createBall()
         self.lastUpdateTime = 0
         
         self.leftPaddle = self.childNode(withName: "//leftPaddle") as? SKSpriteNode
         
+    }
+    
+    func createBall() {
+        
+        let path = CGMutablePath()
+        path.addArc(center: CGPoint.zero,
+                    radius: 15,
+                    startAngle: 0,
+                    endAngle: CGFloat.pi * 2,
+                    clockwise: true)
+        let ball = SKShapeNode(path: path)
+        
+        ball.lineWidth = 1
+        
+        ball.fillColor = .white
+        ball.strokeColor = .white
+        ball.glowWidth = 0.5
+
+        ball.physicsBody = SKPhysicsBody(circleOfRadius: 13/2)
+        
+        self.addChild(ball)
     }
     
     
